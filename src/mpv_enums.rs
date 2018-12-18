@@ -70,7 +70,7 @@ pub enum Event<'a> {
 
 pub fn to_event<'a>(event_id:MpvEventId,
                 error: c_int,
-                reply_userdata: c_ulong,
+                reply_userdata: u64,
                 data:*mut c_void) -> Option<Event<'a>> {
     let userdata = reply_userdata as u32 ;
     match event_id {

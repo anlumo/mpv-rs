@@ -239,7 +239,7 @@ impl MpvHandler {
     /// Set a property asynchronously
     #[cfg_attr(feature = "clippy", allow(temporary_cstring_as_ptr))]
     pub fn set_property_async<T : MpvFormat>(&mut self, property: &str, value : T, userdata:u32) -> Result<()>{
-        let userdata = userdata as ::std::os::raw::c_ulong;
+        let userdata = userdata as u64;
         let mut ret = 0 ;
         let format = T::get_mpv_format();
         value.call_as_c_void(|ptr:*mut c_void|{
@@ -273,7 +273,7 @@ impl MpvHandler {
     /// Get a property asynchronously
     #[cfg_attr(feature = "clippy", allow(temporary_cstring_as_ptr))]
     pub fn get_property_async<T : MpvFormat>(&self, property: &str, userdata :u32) -> Result<()> {
-        let userdata = userdata as ::std::os::raw::c_ulong;
+        let userdata = userdata as u64;
         let ret = unsafe {
             mpv_get_property_async(self.handle,
                                    userdata,
@@ -325,7 +325,7 @@ impl MpvHandler {
 
     /// Send a command asynchronously
     pub fn command_async(&mut self, command: &[&str], userdata :u32) -> Result<()> {
-        let userdata = userdata as ::std::os::raw::c_ulong;
+        let userdata = userdata as u64;
         let command_cstring: Vec<_> = command.iter()
                                              .map(|item| ffi::CString::new(*item).unwrap())
                                              .collect();
@@ -364,7 +364,7 @@ impl MpvHandler {
     /// Observe a property change. The property change will be returned via an Event PropertyChange
     #[cfg_attr(feature = "clippy", allow(temporary_cstring_as_ptr))]
     pub fn observe_property<T:MpvFormat>(&mut self,name:&str,userdata:u32) -> Result<()>{
-        let userdata = userdata as ::std::os::raw::c_ulong;
+        let userdata = userdata as u64;
         let ret = unsafe {
             mpv_observe_property(self.handle,
                                  userdata,
@@ -376,7 +376,7 @@ impl MpvHandler {
 
     /// Unobserve a previously observed property change
     pub fn unobserve_property(&mut self,userdata:u32) -> Result<()> {
-        let userdata = userdata as ::std::os::raw::c_ulong;
+        let userdata = userdata as u64;
         let ret = unsafe {
             mpv_unobserve_property(self.handle,
                                    userdata)
