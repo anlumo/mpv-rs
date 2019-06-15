@@ -160,6 +160,7 @@ pub use mpv_enums::{
     EndFileReason,
     Event,
     MpvFormat,
+    MpvEventId,
     Format
 };
 pub use mpv_types::* ;
