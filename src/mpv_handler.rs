@@ -1,4 +1,4 @@
-use mpv_gen::{mpv_command, mpv_command_async, mpv_wait_event, mpv_create, mpv_initialize,
+use mpv_gen::{mpv_command, mpv_command_async, mpv_request_event, mpv_wait_event, mpv_create, mpv_initialize,
               mpv_terminate_destroy, mpv_handle, mpv_set_option,
               mpv_set_property, mpv_set_property_async, mpv_get_property,
               mpv_get_property_async, mpv_opengl_cb_get_proc_address_fn, mpv_get_sub_api,
@@ -334,6 +334,13 @@ impl MpvHandler {
                                                           .collect();
         command_pointers.push(ptr::null());
         let ret = unsafe { mpv_command_async(self.handle, userdata,command_pointers.as_mut_ptr())};
+
+        ret_to_result(ret, ())
+    }
+
+    /// Enable or disable the given event.
+    pub fn request_event(&mut self, event_id: MpvEventId, enable: bool) -> Result<()> {
+        let ret = unsafe { mpv_request_event(self.handle, event_id, if enable { 1 } else { 0 })};
 
         ret_to_result(ret, ())
     }
